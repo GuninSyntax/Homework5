@@ -1,4 +1,4 @@
-package main_tasks.Lottery.House;
+package main_tasks.House;
 
 import java.util.ArrayList;
 import java.util.HashMap;

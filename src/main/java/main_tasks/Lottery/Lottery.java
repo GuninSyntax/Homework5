@@ -1,4 +1,4 @@
-package main_tasks.Lottery.Lottery;
+package main_tasks.Lottery;
 import java.util.Random;
 
 public class Lottery {
