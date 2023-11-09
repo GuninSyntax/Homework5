@@ -67,7 +67,7 @@ public class Student {
     }
 
     private static double getScoreStudent(List<Integer> score) {
-        int sum = 0;
+        double sum = 0;
         for (Integer integer : score) {
             sum += integer;
         }
@@ -75,7 +75,7 @@ public class Student {
     }
 
     private static double getTotalScoreStudent(List<Integer> score) {
-        int sum = 0;
+        double sum = 0;
         for (Integer integer : score) {
             sum += integer;
         }
