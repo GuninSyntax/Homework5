@@ -1,4 +1,4 @@
-package main_tasks.Olympics1;
+package main_tasks.Olympics;
 
 import java.util.ArrayList;
 import java.util.List;
