@@ -40,7 +40,7 @@ public class Student {
         this.score = score;
     }
 
-    public Student(String name, String surname, String patronymic, int point1, int point2, int point3) {
+    public Student(String name, String surname, String patronymic, int point1, int point2, int point3, int point4) {
         this.score = new ArrayList<>();
         this.name = name;
         this.surname = surname;
@@ -48,6 +48,7 @@ public class Student {
         this.score.add(point1);
         this.score.add(point2);
         this.score.add(point3);
+        this.score.add(point4);
     }
     static void findOutTheWinners(List<Student> students) {
         boolean isSort = false;
@@ -67,33 +68,40 @@ public class Student {
     }
 
     private static double getScoreStudent(List<Integer> score) {
-        double sum = 0;
-        for (Integer integer : score) {
-            sum += integer;
-        }
-        return (sum + 0.0) / score.size();
-    }
-
-    private static double getTotalScoreStudent(List<Integer> score) {
-        double sum = 0;
-        for (Integer integer : score) {
-            sum += integer;
-        }
-        return sum;
+        return (score.get(0) + score.get(1) + score.get(2) + score.get(3) + 0.0) / score.size();
     }
 
     private static void printWinners(List<Student> winners) {
         String s = null;
         for (int i = 0; i < winners.size(); i++) {
-            s = i + 1 < 4 ? "МЕСТО" : "место";
-            System.out.print(i + 1 + " " + s + ": ");
+            System.out.print(i + 1 + " место: ");
             System.out.print(winners.get(i).getSurname() + " ");
             System.out.println(winners.get(i).getName() + " " + winners.get(i).getPatronymic());
-            System.out.print("Общее количество баллов студента " + (winners.get(i).getSurname()) + " ");
-            System.out.print((winners.get(i).getName()) + " " + winners.get(i).getName() + ": ");
-            System.out.println(getTotalScoreStudent(winners.get(i).getScore()));
             System.out.println("Среднее арифметическое кол-во баллов: " + getScoreStudent(winners.get(i).getScore()));
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        Student student1 = new Student
+                ("Дмитрий", "Олегов", "Васильевич", 56, 23, 75, 54);
+        Student student2 = new Student
+                ("Михаил", "Галкин", "Юрьевич", 45, 20, 99, 38);
+        Student student3 = new Student
+                ("Сергей", "Хмуров", "Ренатович", 10, 54, 78, 58);
+        Student student4 = new Student
+                ("Алексей", "Лаптев", "Валерьевич", 83, 66, 12, 84);
+        Student student5 = new Student
+                ("Василий", "Зябликов", "Михайлович", 99, 100, 70, 34);
+        Student student6 = new Student
+                ("Анна", "Рябина", "Васильевна", 99, 100, 69, 45);
+        List<Student> students = new ArrayList<>();
+        students.add(student1);
+        students.add(student2);
+        students.add(student3);
+        students.add(student4);
+        students.add(student5);
+        students.add(student6);
+        Student.findOutTheWinners(students);
     }
 }
