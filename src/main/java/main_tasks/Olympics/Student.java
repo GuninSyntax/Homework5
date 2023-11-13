@@ -50,6 +50,7 @@ public class Student {
         this.score.add(point3);
         this.score.add(point4);
     }
+
     static void findOutTheWinners(List<Student> students) {
         boolean isSort = false;
         while(!isSort) {
@@ -57,7 +58,6 @@ public class Student {
             for (int i = 0; i < students.size() - 1; i++) {
                 if (getScoreStudent(students.get(i).getScore()) < getScoreStudent(students.get(i + 1).getScore())) {
                     isSort = false;
-
                     Student temp = students.get(i);
                     students.set(i, students.get(i + 1));
                     students.set(i + 1, temp);
@@ -68,11 +68,14 @@ public class Student {
     }
 
     private static double getScoreStudent(List<Integer> score) {
-        return (score.get(0) + score.get(1) + score.get(2) + score.get(3) + 0.0) / score.size();
+        double sum = 0;
+        for (Integer integer : score) {
+            sum += integer;
+        }
+        return (sum + 0.0) / score.size();
     }
 
     private static void printWinners(List<Student> winners) {
-        String s = null;
         for (int i = 0; i < winners.size(); i++) {
             System.out.print(i + 1 + " место: ");
             System.out.print(winners.get(i).getSurname() + " ");

@@ -1,8 +1,6 @@
 package additional_task;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Book {
     private int id;
@@ -11,14 +9,6 @@ public class Book {
     private String author;
     private String description;
     private int yearOfRelease;
-
-    static private int countBooks = 0;
-    static private List<Book> allBooks = new ArrayList<>();
-    static private List<Book> tempBooks = new ArrayList<>();
-    static private List<Book> tempBooksAuthor = new ArrayList<>();
-    static private List<Book> tempBooksGenre = new ArrayList<>();
-    static private List<Book> tempBooksRelease = new ArrayList<>();
-    static private final String errorNoChoicePage = "Такого варианта выбора нет, повторите попытку...";
 
     public int getId() {
         return id;
@@ -68,7 +58,15 @@ public class Book {
         this.yearOfRelease = yearOfRelease;
     }
 
+    private static int countBooks = 0;
+    private static Map<Integer, Book> books = new HashMap<>();
+    static private final String errorNoChoicePage = "\nТакого варианта выбора нет, убедитесь, что ввели " +
+            "верные данные и повторите попытку...";
+    static private final String defaultInfoForInput = "Пожалуйста, выберите вариант действия: ";
+    static private final String line = "________________________________________________________________________________________";
+
     public Book(String title, String genre, String author, String description, int yearOfRelease) {
+        countBooks++;
         this.title = title;
         this.genre = genre;
         this.author = author;
@@ -78,77 +76,66 @@ public class Book {
     }
 
     private static void initFirstBook() {
-        countBooks++;
         Book book1 = new Book("Оно", "Ужасы", "Стивен Кинг",
                 "Загадочная история о инопланетном монстре, который кошмарит небольшой город " +
                         "пожирая детей...", 1986);
-        allBooks.add(book1);
-        countBooks++;
+        books.put(countBooks, book1);
         Book book2 = new Book("Гарри Поттер", "Фентези", "Джоан Роулинг",
                 "Волшебная история о мальчике живущем под лестницей (Не то, что бы ему нравилось)" +
                         ", жизнь которого изменилась в 10 лет...",
                 1997);
-        allBooks.add(book2);
-        countBooks++;
+        books.put(countBooks, book2);
         Book book3 = new Book("До встречи с тобой", "Драма", "Джоджо Мойес",
                 "История любви на коляске...",
                 2012);
-        allBooks.add(book3);
-        countBooks++;
+        books.put(countBooks, book3);
         Book book4 = new Book("Властелин колец", "Фентези", "Джон Рональд Руэл Толкин",
                 "История о \"человеке\", который бы никогда не стал баскетболистом, в итоге и не стал...",
                 1955);
-        allBooks.add(book4);
-        countBooks++;
+        books.put(countBooks, book4);
         Book book5 = new Book("Голодные игры", "Роман", "Сьюзен Коллинз",
                 "Либо ты, либо тебя, хорошо если попадешься с парнем, который буллил тебя в 5 классе...",
                 2008);
-        allBooks.add(book5);
-        countBooks++;
+        books.put(countBooks, book5);
         Book book6 = new Book("Чарли и Шоколадная фабрика", "Фентези", "Роальд Даль",
                 "История о мальчике, у который полный рот коренных зубов, с которыми придется попрощаться",
                 1964);
-        allBooks.add(book6);
-        countBooks++;
+        books.put(countBooks, book6);
         Book book7 = new Book("Сумерки", "Роман", "Стефани Майер",
                 "Вампиры верят, что самые праведные из них после смерти попадают на станцию переливания крови",
                 2005);
-        allBooks.add(book7);
-        countBooks++;
+        books.put(countBooks, book7);
         Book book8 = new Book("Зеленая миля", "Роман", "Стивен Кинг",
                 "Даже писать нечего...реально грустно", 1996);
-        allBooks.add(book8);
-        countBooks++;
+        books.put(countBooks, book8);
         Book book9 = new Book("Побег из Шоушенка", "Криминал/драма", "Стивен Кинг",
                 "История про последствие \"Cвободы слова\"", 1982);
-        allBooks.add(book9);
-        countBooks++;
+        books.put(countBooks, book9);
         Book book10 = new Book("Бойцовский клуб", "Криминал/драма", "Чак Паланик",
                 "Первое правило бойцовского клуба...", 1996);
-        allBooks.add(book10);
+        books.put(countBooks, book10);
     }
 
-    public static void initBookLibrary() {
+    public static void main(String[] args) {
         initFirstBook();
         printWelcome();
         while (true) {
             printHomePage();
-            String inputUser = getInputUser();
+            String inputUser = getInputUser(defaultInfoForInput);
             if (inputUser.equalsIgnoreCase("Выйти")) break;
             else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                switch (inputUserInt) {
-                    case 1:
-                        allBookPage();
-                        break;
-                    case 2:
+                switch (inputUser) {
+                    case "1":
                         searchBookPage();
                         break;
-                    case 3:
-                        addABookPage();
+                    case "2":
+                        addBookPage();
                         break;
-                    case 4:
+                    case "3":
                         removeBookPage();
+                        break;
+                    case "4":
+                        printAllBookPage();
                         break;
                     default:
                         System.out.println(errorNoChoicePage);
@@ -171,25 +158,129 @@ public class Book {
         System.out.println("________________________________________________________________________________________");
         System.out.println("Пожалуйста выберите страницу из предложенных: ");
         System.out.println();
-        System.out.println("1. Показать всю коллекцию книг");
-        System.out.println("2. Поиск книги");
-        System.out.println("3. Добавить книгу");
-        System.out.println("4. Удалить книгу");
+        System.out.println("1. Поиск книги");
+        System.out.println("2. Добавить книгу");
+        System.out.println("3. Удалить книгу");
+        System.out.println("4. Показать всю коллекцию книг");
     }
 
-    private static String getInputUser() {
+    private static void printBook(Book book) {
+        System.out.println(line);
+        System.out.println();
+        System.out.println("ID КНИГИ: " + book.getId());
+        System.out.println("НАЗВАНИЕ КНИГИ: " + book.getTitle());
+        System.out.println("АВТОР: " + book.getAuthor());
+        System.out.println("ЖАНР: " + book.getGenre());
+        System.out.println("ГОД ИЗДАНИЯ: " + book.getYearOfRelease());
+        System.out.println("КРАТКОЕ ОПИСАНИЕ: " + book.getDescription());
+    }
+
+    private static void searchBookPage() {
+        String infoComment;
+        String typeSearch;
+        while (true) {
+            System.out.println("________________________________________________________________________________________");
+            System.out.println("ВЫБОР ВАРИАНТА ПОИСКА");
+            System.out.println();
+            System.out.println("1. Поиск книги по названию");
+            System.out.println("2. Поиск книги по автору");
+            System.out.println("3. Поиск книги по жанру");
+            System.out.println("4. Поиск книги по году издания");
+            String inputUser = getInputUser(defaultInfoForInput);
+            if (inputUser.equalsIgnoreCase("Выйти")) break;
+            else {
+                switch (inputUser) {
+                    case "1":
+                        infoComment = "Введите полное название книги (Например: Оно) : ";
+                        typeSearch = "ПОИСК ПО НАЗВАНИЮ";
+                        searchBook(infoComment, typeSearch);
+                        break;
+                    case "2":
+                        infoComment = "Введите имя и фамилию автора (Например: Стивен Кинг): ";
+                        typeSearch = "ПОИСК ПО АВТОРУ";
+                        searchBook(infoComment, typeSearch);
+                        break;
+                    case "3":
+                        infoComment = "Введите жанр книги, которую вы ищите (Например: Ужасы, Драма): ";
+                        typeSearch = "ПОИСК ПО ЖАНРУ";
+                        searchBook(infoComment, typeSearch);
+                        break;
+                    case "4":
+                        infoComment = "Введите год издания книги (Например: 1982): ";
+                        typeSearch = "ПОИСК ПО ГОДУ ИЗДАНИЯ";
+                        searchBook(infoComment, typeSearch);
+                        break;
+                    default:
+                        System.out.println(errorNoChoicePage);
+                }
+                break;
+            }
+        }
+    }
+
+    private static void searchBook(String infoComment, String typeSearch) {
+        boolean haveSearchBook = false;
+        while (true) {
+            System.out.println(line);
+            System.out.println(typeSearch);
+            String inputUser = getInputUser(infoComment);
+            if (inputUser.equalsIgnoreCase("Выйти")) break;
+            switch (typeSearch) {
+                case "ПОИСК ПО НАЗВАНИЮ":
+                    for (Map.Entry<Integer, Book> entry : books.entrySet()) {
+                        if (inputUser.equalsIgnoreCase(entry.getValue().getTitle())) {
+                            printBook(entry.getValue());
+                            haveSearchBook = true;
+                        }
+                    }
+                    if (!haveSearchBook) System.out.println(errorNoChoicePage);
+                    break;
+                case "ПОИСК ПО АВТОРУ":
+                    for (Map.Entry<Integer, Book> entry : books.entrySet()) {
+                        if (inputUser.equalsIgnoreCase(entry.getValue().getAuthor())) {
+                            printBook(entry.getValue());
+                            haveSearchBook = true;
+                        }
+                    }
+                    if (!haveSearchBook) System.out.println(errorNoChoicePage);
+                    break;
+                case "ПОИСК ПО ЖАНРУ":
+                    for (Map.Entry<Integer, Book> entry : books.entrySet()) {
+                        if (inputUser.equalsIgnoreCase(entry.getValue().getGenre())) {
+                            printBook(entry.getValue());
+                            haveSearchBook = true;
+                        }
+                    }
+                    if (!haveSearchBook) System.out.println(errorNoChoicePage);
+                    break;
+                case "ПОИСК ПО ГОДУ ИЗДАНИЯ":
+                    int inputUserYear;
+                    if (checkInputNumber(inputUser)) {
+                        inputUserYear = Integer.parseInt(inputUser);
+                    } else {
+                        System.out.println(errorNoChoicePage);
+                        break;
+                    }
+                    for (Map.Entry<Integer, Book> entry : books.entrySet()) {
+                        if (inputUserYear == entry.getValue().getYearOfRelease()) {
+                            printBook(entry.getValue());
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
+    private static String getInputUser(String infoComment) {
         Scanner scanner = new Scanner(System.in);
-        String input = null;
+        String input;
         while (true) {
             System.out.println();
-            System.out.print("Пожалуйста, введите номер варианта (или введите \"Выйти\" для выхода): ");
+            System.out.print(infoComment + " (или введите \"Выйти\" для выхода): ");
             input = scanner.nextLine();
-            if (input.equalsIgnoreCase("Выйти")) break;
-            else if (input.isEmpty()) {
-                System.out.println("Нельзя вводить пустою строку");
-                continue;
-            } else if (checkInputNumber(input)) break;
-            else System.out.println(errorNoChoicePage);
+            if (input.isEmpty()) {
+                System.out.println("\nНельзя вводить пустую строку!");
+            } else break;
         }
         return input;
     }
@@ -206,488 +297,82 @@ public class Book {
         return haveNumber;
     }
 
-    private static void allBookPage() {
-        while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("ВЫБОР КНИГИ ИЗ ВСЕЙ КОЛЛЕКЦИИ");
-            System.out.println();
-            for (int i = 0; i < allBooks.size(); i++) {
-                System.out.println(1 + i + ". \"" + allBooks.get(i).getTitle() + "\" " + allBooks.get(i).getAuthor());
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                if (inputUserInt < 1 || inputUserInt > allBooks.size()) System.out.println(errorNoChoicePage);
-                else {
-                    selectedBookOfAllBooks(inputUserInt);
-                }
-                break;
-            }
-        }
-    }
-
-    private static void selectedBookOfAllBooks(int inputUser) {
-        System.out.println("________________________________________________________________________________________");
-        for (int i = 0; i < allBooks.size(); i++) {
-            if (inputUser == i + 1) {
-                System.out.println("ID КНИГИ: " + allBooks.get(i).getId());
-                System.out.println("НАЗВАНИЕ КНИГИ: " + allBooks.get(i).getTitle());
-                System.out.println("АВТОР: " + allBooks.get(i).getAuthor());
-                System.out.println("ЖАНР: " + allBooks.get(i).getGenre());
-                System.out.println("ГОД ИЗДАНИЯ: " + allBooks.get(i).getYearOfRelease());
-                System.out.println("КРАТКОЕ ОПИСАНИЕ: " + allBooks.get(i).getDescription());
-            }
-        }
-    }
-
-    private static void searchBookPage() {
-        while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("ВЫБОР ВАРИАНТА ПОИСКА");
-            System.out.println();
-            System.out.println("1. Поиск книги по названию");
-            System.out.println("2. Поиск книги по автору");
-            System.out.println("3. Поиск книги по жанру");
-            System.out.println("4. Поиск книги по году издания");
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                switch (inputUserInt) {
-                    case 1:
-                        searchBookByTitle();
-                        break;
-                    case 2:
-                        searchBookByAuthor();
-                        break;
-                    case 3:
-                        searchBookByGenre();
-                        break;
-                    case 4:
-                        searchBookByRelease();
-                        break;
-                    default:
-                        System.out.println(errorNoChoicePage);
-                }
-                break;
-            }
-        }
-    }
-
-    private static void searchBookByTitle() {
-        while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("ПОИСК ПО НАЗВАНИЮ");
-            for (int i = 0; i < allBooks.size(); i++) {
-                System.out.println(1 + i + ". \"" + allBooks.get(i).getTitle() + "\"");
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                if (inputUserInt < 1 || inputUserInt > allBooks.size()) System.out.println(errorNoChoicePage);
-                else {
-                    selectedBookOfAllBooks(inputUserInt);
-                }
-                break;
-            }
-        }
-    }
-
-    private static void searchBookByAuthor() {
-        while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("ПОИСК ПО АВТОРУ");
-            for (int i = 0; i < allBooks.size(); i++) {
-                if (!tempBooks.contains(allBooks.get(i).getAuthor())) {
-                    tempBooks.add(allBooks.get(i));
-                }
-            }
-            for (int i = 0; i < tempBooks.size(); i++) {
-                for (int j = 0; j < tempBooks.size(); j++) {
-                    if (tempBooks.get(i).getAuthor().equalsIgnoreCase(tempBooks.get(j).getAuthor()) &&
-                            tempBooks.get(i) != tempBooks.get(j)) {
-                        tempBooks.remove(j);
-                    }
-                }
-            }
-            for (int i = 0; i < tempBooks.size(); i++) {
-                System.out.println(1 + i + ". \"" + tempBooks.get(i).getAuthor() + "\"");
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                if (inputUserInt < 1 || inputUserInt > tempBooks.size()) System.out.println(errorNoChoicePage);
-                else {
-                    selectedAuthorBooks(inputUserInt);
-                }
-                break;
-            }
-        }
-        tempBooks.clear();
-    }
-
-    private static void selectedAuthorBooks(int input) {
-        System.out.println("________________________________________________________________________________________");
-        while (true) {
-            for (int i = 0; i < tempBooks.size(); i++) {
-                if (input == 1 + i) {
-                    for (int j = 0; j < allBooks.size(); j++) {
-                        if (tempBooks.get(i).getAuthor().equalsIgnoreCase(allBooks.get(j).getAuthor())) {
-                            tempBooksAuthor.add(allBooks.get(j));
-                        }
-                    }
-                }
-            }
-            for (int i = 0; i < tempBooksAuthor.size(); i++) {
-                System.out.println(1 + i + ". \"" + tempBooksAuthor.get(i).getTitle() + "\"");
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInteger = Integer.parseInt(inputUser);
-                selectedBookOfAuthor(inputUserInteger);
-                tempBooksAuthor.clear();
-                tempBooks.clear();
-                break;
-            }
-        }
-        tempBooksAuthor.clear();
-        tempBooks.clear();
-    }
-
-    private static void selectedBookOfAuthor(int inputUser) {
-        System.out.println("________________________________________________________________________________________");
-        for (int i = 0; i < tempBooksAuthor.size(); i++) {
-            if (inputUser == i + 1) {
-                System.out.println("ID КНИГИ: " + tempBooksAuthor.get(i).getId());
-                System.out.println("НАЗВАНИЕ КНИГИ: " + tempBooksAuthor.get(i).getTitle());
-                System.out.println("АВТОР: " + tempBooksAuthor.get(i).getAuthor());
-                System.out.println("ЖАНР: " + tempBooksAuthor.get(i).getGenre());
-                System.out.println("ГОД ИЗДАНИЯ: " + tempBooksAuthor.get(i).getYearOfRelease());
-                System.out.println("КРАТКОЕ ОПИСАНИЕ: " + tempBooksAuthor.get(i).getDescription());
-            }
-        }
-    }
-
-    private static void searchBookByGenre() {
-        System.out.println("________________________________________________________________________________________");
-        System.out.println("ПОИСК ПО ЖАНРУ");
-        while (true) {
-            for (int i = 0; i < allBooks.size(); i++) {
-                if (!tempBooks.contains(allBooks.get(i).getGenre())) {
-                    tempBooks.add(allBooks.get(i));
-                }
-            }
-            for (int i = 0; i < tempBooks.size(); i++) {
-                for (int j = 0; j < tempBooks.size(); j++) {
-                    if (tempBooks.get(i).getGenre().equalsIgnoreCase(tempBooks.get(j).getGenre()) &&
-                            tempBooks.get(i) != tempBooks.get(j)) {
-                        tempBooks.remove(j);
-                    }
-                }
-            }
-            for (int i = 0; i < tempBooks.size(); i++) {
-                System.out.println(1 + i + ". \"" + tempBooks.get(i).getGenre() + "\"");
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                if (inputUserInt < 1 || inputUserInt > tempBooks.size()) System.out.println(errorNoChoicePage);
-                else {
-                    selectedGenreBooks(inputUserInt);
-                }
-                break;
-            }
-        }
-        tempBooks.clear();
-    }
-
-    private static void selectedGenreBooks(int input) {
-        System.out.println("________________________________________________________________________________________");
-        while (true) {
-            for (int i = 0; i < tempBooks.size(); i++) {
-                if (input == 1 + i) {
-                    for (int j = 0; j < allBooks.size(); j++) {
-                        if (tempBooks.get(i).getGenre().equalsIgnoreCase(allBooks.get(j).getGenre())) {
-                            tempBooksGenre.add(allBooks.get(j));
-                        }
-                    }
-                }
-            }
-            for (int i = 0; i < tempBooksGenre.size(); i++) {
-                System.out.println(1 + i + ". \"" + tempBooksGenre.get(i).getTitle() + "\" " +
-                        tempBooksGenre.get(i).getAuthor());
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInteger = Integer.parseInt(inputUser);
-                selectedBookOfGenre(inputUserInteger);
-                tempBooksGenre.clear();
-                tempBooks.clear();
-                break;
-            }
-        }
-        tempBooks.clear();
-        tempBooksGenre.clear();
-    }
-
-    private static void selectedBookOfGenre(int inputUser) {
-        System.out.println("________________________________________________________________________________________");
-        for (int i = 0; i < tempBooksGenre.size(); i++) {
-            if (inputUser == i + 1) {
-                System.out.println("ID КНИГИ: " + tempBooksGenre.get(i).getId());
-                System.out.println("НАЗВАНИЕ КНИГИ: " + tempBooksGenre.get(i).getTitle());
-                System.out.println("АВТОР: " + tempBooksGenre.get(i).getAuthor());
-                System.out.println("ЖАНР: " + tempBooksGenre.get(i).getGenre());
-                System.out.println("ГОД ИЗДАНИЯ: " + tempBooksGenre.get(i).getYearOfRelease());
-                System.out.println("КРАТКОЕ ОПИСАНИЕ: " + tempBooksGenre.get(i).getDescription());
-            }
-        }
-    }
-
-    private static void searchBookByRelease() {
-        System.out.println("________________________________________________________________________________________");
-        System.out.println("ПОИСК ПО ГОДУ РЕЛИЗА");
-        while (true) {
-            for (int i = 0; i < allBooks.size(); i++) {
-                if (!tempBooks.contains(allBooks.get(i).getYearOfRelease())) {
-                    tempBooks.add(allBooks.get(i));
-                }
-            }
-            for (int i = 0; i < tempBooks.size(); i++) {
-                for (int j = 0; j < tempBooks.size(); j++) {
-                    if (tempBooks.get(i).getYearOfRelease() == tempBooks.get(j).getYearOfRelease() &&
-                            tempBooks.get(i) != tempBooks.get(j)) {
-                        tempBooks.remove(j);
-                    }
-                }
-            }
-            for (int i = 0; i < tempBooks.size(); i++) {
-                System.out.println(1 + i + ". " + tempBooks.get(i).getYearOfRelease() + " год.");
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                if (inputUserInt < 1 || inputUserInt > tempBooks.size()) System.out.println(errorNoChoicePage);
-                else {
-                    selectedRelease(inputUserInt);
-                }
-                break;
-            }
-        }
-        tempBooks.clear();
-    }
-
-    private static void selectedRelease(int input) {
-        System.out.println("________________________________________________________________________________________");
-        while (true) {
-            for (int i = 0; i < tempBooks.size(); i++) {
-                if (input == 1 + i) {
-                    for (int j = 0; j < allBooks.size(); j++) {
-                        if (tempBooks.get(i).getYearOfRelease() == (allBooks.get(j).getYearOfRelease())) {
-                            tempBooksRelease.add(allBooks.get(j));
-                        }
-                    }
-                }
-            }
-            for (int i = 0; i < tempBooksRelease.size(); i++) {
-                System.out.println(1 + i + ". \"" + tempBooksRelease.get(i).getTitle() + "\" " +
-                        tempBooksRelease.get(i).getAuthor());
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInteger = Integer.parseInt(inputUser);
-                selectedBookRelease(inputUserInteger);
-                tempBooksRelease.clear();
-                tempBooks.clear();
-                break;
-            }
-        }
-        tempBooks.clear();
-        tempBooksRelease.clear();
-    }
-
-    private static void selectedBookRelease(int inputUser) {
-        System.out.println("________________________________________________________________________________________");
-        for (int i = 0; i < tempBooksRelease.size(); i++) {
-            if (inputUser == i + 1) {
-                System.out.println("ID КНИГИ: " + tempBooksRelease.get(i).getId());
-                System.out.println("НАЗВАНИЕ КНИГИ: " + tempBooksRelease.get(i).getTitle());
-                System.out.println("АВТОР: " + tempBooksRelease.get(i).getAuthor());
-                System.out.println("ЖАНР: " + tempBooksRelease.get(i).getGenre());
-                System.out.println("ГОД ИЗДАНИЯ: " + tempBooksRelease.get(i).getYearOfRelease());
-                System.out.println("КРАТКОЕ ОПИСАНИЕ: " + tempBooksRelease.get(i).getDescription());
-            }
-        }
-    }
-
-    private static void addABookPage() {
-        String title = null;
-        String genre = null;
-        String author = null;
-        String description = null;
+    private static void addBookPage() {
+        String InfoTitle = "Введите название книги (Например: В далеком крае): ";
+        String InfoAuthor = "Введите автора книги (Например: Стивен Кинг): ";
+        String InfoYearOfRelease = "Введите год издания книги (Например: 1982): ";
+        String InfoGenre = "Введите жанр книги (Например: Роман): ";
+        String InfoDescription = "Введите краткое описание книги: ";
+        System.out.println(line);
+        System.out.println("ДОБАВЛЕНИЕ КНИГИ");
+        String title = getInputUser(InfoTitle);
+        String author = getInputUser(InfoAuthor);
         int yearOfRelease = 0;
+        String input;
         while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("ДОБАВЛЕНИЕ КНИГИ В КНИГОТЕКУ");
-            System.out.print("Введите название книги (или \"выйти\" для возвращения к предыдущему модулю): ");
-            title = getInputUserAdding();
-            if (title.equalsIgnoreCase("Выйти")) break;
-            System.out.print("Введите жанр книги (или \"выйти\" для возвращения к предыдущему модулю): ");
-            genre = getInputUserAdding();
-            if (genre.equalsIgnoreCase("Выйти")) break;
-            System.out.print("Введите Автора книги (или \"выйти\" для возвращения к предыдущему модулю): ");
-            author = getInputUserAdding();
-            boolean duplicate = false;
-            for (int i = 0; i < allBooks.size(); i++) {
-                if (title.equalsIgnoreCase(allBooks.get(i).getTitle()) &&
-                        author.equalsIgnoreCase(allBooks.get(i).getAuthor())) {
-                    System.out.println("\nВ библиотке уже есть данная книга!\n");
-                    System.out.println("ID: " + allBooks.get(i).getId() + " \"" + allBooks.get(i).title + "\" " +
-                            allBooks.get(i).getAuthor());
-                    duplicate = true;
-                    break;
+            input = getInputUser(InfoYearOfRelease);
+            if (checkInputNumber(input)) {
+                yearOfRelease = Integer.parseInt(input);
+                if (yearOfRelease > 2023) {
+                    System.out.println("\nГод не может быть больше текущего!");
                 }
-            }
-            if (duplicate) continue;
-            if (author.equalsIgnoreCase("Выйти")) break;
-            System.out.print("Введите краткое описание книги (или \"выйти\" для возвращения к предыдущему модулю): ");
-            description = getInputUserAdding();
-            if (description.equalsIgnoreCase("Выйти")) break;
-            System.out.print("Введите год релиза книги (или \"выйти\" для возвращения к предыдущему модулю): ");
-            String inputUser = getInputUserYearOfRelease();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                yearOfRelease = Integer.parseInt(inputUser);
-                preAddingBook(title, genre, author, description, yearOfRelease);
                 break;
-            }
+            } else System.out.println("\nОШИБКА ВВОДА! Должно быть введено число!");
         }
-    }
-
-    private static String getInputUserAdding() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
-    }
-
-    private static String getInputUserYearOfRelease() {
-        Scanner scanner = new Scanner(System.in);
-        String input = null;
-        while (true) {
-            input = scanner.nextLine();
-            if (input.isEmpty()) {
-                System.out.println("Нельзя вводить пустою строку");
-            } else if (checkInputNumber(input)) {
-                break;
-            } else {
-                System.out.print("Введите корректный год издания книги!: ");
-            }
-        }
-        return input;
-    }
-
-    private static void preAddingBook(String title, String genre, String author, String description, int yearOfRelease) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("ПОДТВЕРЖДЕНИЕ ДОБАВЛЕНИЯ");
-            System.out.println("Вы уверены, что хотите ДОБАВИТЬ книгу?");
-            System.out.println();
-            System.out.println("НАЗВАНИЕ КНИГИ: " + title);
-            System.out.println("АВТОР: " + author);
-            System.out.println("ЖАНР: " + genre);
-            System.out.println("ГОД ИЗДАНИЯ: " + yearOfRelease + " год");
-            System.out.println("КРАТКОЕ ОПИСАНИЕ: " + description);
-            System.out.println();
-            System.out.print("да / нет: ");
-            String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("да")) {
-                addBook(title, genre, author, description, yearOfRelease);
-                break;
-            } else if (input.equalsIgnoreCase("нет")) break;
-            else {
-                System.out.println(errorNoChoicePage);
-            }
-        }
-    }
-
-    private static void addBook(String title, String genre, String author, String description, int yearOfRelease) {
-        countBooks++;
+        String genre = getInputUser(InfoGenre);
+        String description = getInputUser(InfoDescription);
         Book book = new Book(title, genre, author, description, yearOfRelease);
-        allBooks.add(book);
-        System.out.println("________________________________________________________________________________________");
-        System.out.println("КНИГА УСПЕШНО ДОБАВЛЕНА!");
-        System.out.println("УНИКАЛЬНЫЙ ID КНИГИ: " + book.getId());
+        System.out.println(line);
+        System.out.println("КНИГА УСПЕШНО ДОБАВЛЕНА");
+        books.put(countBooks, book);
+        printBook(book);
     }
 
     private static void removeBookPage() {
-        int maxID = 0;
         while (true) {
-            System.out.println("________________________________________________________________________________________");
-            System.out.println("УДАЛЕНИЕ КНИГИ ПО ID");
-            System.out.println();
-            for (int i = 0; i < allBooks.size(); i++) {
-                System.out.println("ID КНИГИ: " + allBooks.get(i).getId() + " \"" +
-                        allBooks.get(i).title + "\" " + allBooks.get(i).author);
-                if (maxID < allBooks.get(i).getId()) {
-                    maxID = allBooks.get(i).getId();
-                }
-            }
-            String inputUser = getInputUser();
-            if (inputUser.equalsIgnoreCase("Выйти")) break;
-            else {
-                int inputUserInt = Integer.parseInt(inputUser);
-                if (inputUserInt < 1 || inputUserInt > maxID) System.out.println(errorNoChoicePage);
-                else {
-                    preRemove(inputUserInt);
+            System.out.println(line);
+            System.out.println("УДАЛЕНИЕ КНИГИ");
+            String infoComment = "Введите ID книги, которую хотите удалить: ";
+            int bookId = 0;
+            String input;
+            while (true) {
+                input = getInputUser(infoComment);
+                if (input.equalsIgnoreCase("Выйти")) break;
+                else if (checkInputNumber(input)) {
+                    bookId = Integer.parseInt(input);
                     break;
+                } else {
+                    System.out.println("\nОШИБКА ВВОДА! Должно быть введено число!");
+                }
+                if (input.equalsIgnoreCase("Выйти")) break;
+            }
+            boolean notHaveId = false;
+            for (Map.Entry<Integer, Book> entry : books.entrySet()) {
+                if (bookId != entry.getKey()) notHaveId = true;
+                if (bookId == entry.getKey()) {
+                    notHaveId = false;
+                    System.out.println("ВЫ УВЕРЕНЫ, ЧТО ХОТИТЕ УДАЛИТЬ ДАННУЮ КНИГУ?:");
+                    printBook(entry.getValue());
+                    input = getInputUser("Введите да / нет: ");
+                    if (input.equalsIgnoreCase("нет")) break;
+                    else if (input.equalsIgnoreCase("да")) {
+                        books.remove(entry.getKey());
+                        break;
+                    }
                 }
             }
+            if (notHaveId) {
+                System.out.println("\nКниги с таким ID нет!");
+            }
+            break;
         }
     }
 
-    private static void preRemove(int input) {
-        Scanner scanner = new Scanner(System.in);
-        for (int i = 0; i < allBooks.size(); i++) {
-            if (input == allBooks.get(i).getId()) {
-                System.out.println("________________________________________________________________________________________");
-                System.out.println("ВЫ УВЕРЕНЫ ЧТО ХОТИТЕ УДАЛИТЬ ЭТУ КНИГУ?");
-                System.out.println();
-                System.out.println("ID КНИГИ: " + allBooks.get(i).getId());
-                System.out.println("НАЗВАНИЕ КНИГИ: " + allBooks.get(i).getTitle());
-                System.out.println("АВТОР: " + allBooks.get(i).getAuthor());
-                System.out.println("ЖАНР: " + allBooks.get(i).getGenre());
-                System.out.println("ГОД ИЗДАНИЯ: " + allBooks.get(i).getYearOfRelease());
-                System.out.println("КРАТКОЕ ОПИСАНИЕ: " + allBooks.get(i).getDescription());
-                System.out.print("да / нет: ");
-                String inputUser = scanner.nextLine();
-                if (inputUser.equalsIgnoreCase("да")) {
-                    removeBook(input);
-                    break;
-                } else if (inputUser.equalsIgnoreCase("нет")) break;
-                else {
-                    System.out.println(errorNoChoicePage);
-                }
-                break;
-            }
-        }
-    }
-
-    private static void removeBook(int input) {
-        for (int i = 0; i < allBooks.size(); i++) {
-            if (input == allBooks.get(i).getId()) {
-                allBooks.remove(i);
-                System.out.println("________________________________________________________________________________________");
-                System.out.println("КНИГА УСПЕШНО УДАЛЕНА!");
-                break;
-            }
+    private static void printAllBookPage() {
+        for (Map.Entry<Integer, Book> entry : books.entrySet()) {
+            System.out.println("ID: " + entry.getKey() + " \"" + entry.getValue().getTitle() + "\" " +
+                    entry.getValue().getAuthor() + ", жанр: " + entry.getValue().getGenre() + ", год издания: " +
+                    entry.getValue().getYearOfRelease());
         }
     }
 }
