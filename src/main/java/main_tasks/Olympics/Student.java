@@ -53,7 +53,7 @@ public class Student {
 
     static void findOutTheWinners(List<Student> students) {
         boolean isSort = false;
-        while(!isSort) {
+        while (!isSort) {
             isSort = true;
             for (int i = 0; i < students.size() - 1; i++) {
                 if (getScoreStudent(students.get(i).getScore()) < getScoreStudent(students.get(i + 1).getScore())) {
