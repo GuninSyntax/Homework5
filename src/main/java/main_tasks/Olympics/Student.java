@@ -72,7 +72,7 @@ public class Student {
     }
 
     private static void printWinners(List<Student> winners) {
-        for (int i = 0; i < winners.size(); i++) {
+        for (int i = 0; i < 3; i++) {
             System.out.print(i + 1 + " место: ");
             System.out.print(winners.get(i).getSurname() + " ");
             System.out.println(winners.get(i).getName() + " " + winners.get(i).getPatronymic());

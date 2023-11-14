@@ -9,7 +9,8 @@ public class Main {
                 ("Дмитрий", "Олегов", "Васильевич", new ArrayList<Integer>() {{
                     add(82);
                     add(58);
-                    add(28);}});
+                    add(28);
+                }});
         Student student2 = new Student
                 ("Михаил", "Галкин", "Юрьевич", new ArrayList<Integer>() {{
                     add(90);
