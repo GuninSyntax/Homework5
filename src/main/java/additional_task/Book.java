@@ -306,7 +306,9 @@ public class Book {
         System.out.println(line);
         System.out.println("ДОБАВЛЕНИЕ КНИГИ");
         String title = getInputUser(InfoTitle);
+        if (title.equalsIgnoreCase("выйти")) return;
         String author = getInputUser(InfoAuthor);
+        if (author.equalsIgnoreCase("выйти")) return;
         int yearOfRelease = 0;
         String input;
         while (true) {
@@ -315,12 +317,15 @@ public class Book {
                 yearOfRelease = Integer.parseInt(input);
                 if (yearOfRelease > 2023) {
                     System.out.println("\nГод не может быть больше текущего!");
+                    continue;
                 }
                 break;
             } else System.out.println("\nОШИБКА ВВОДА! Должно быть введено число!");
         }
         String genre = getInputUser(InfoGenre);
+        if (genre.equalsIgnoreCase("выйти")) return;
         String description = getInputUser(InfoDescription);
+        if (description.equalsIgnoreCase("выйти")) return;
         Book book = new Book(title, genre, author, description, yearOfRelease);
         System.out.println(line);
         System.out.println("КНИГА УСПЕШНО ДОБАВЛЕНА");
