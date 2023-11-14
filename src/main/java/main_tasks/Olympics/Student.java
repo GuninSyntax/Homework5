@@ -40,15 +40,11 @@ public class Student {
         this.score = score;
     }
 
-    public Student(String name, String surname, String patronymic, int point1, int point2, int point3, int point4) {
-        this.score = new ArrayList<>();
+    public Student(String name, String surname, String patronymic,List<Integer> score) {
+        this.score = score;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.score.add(point1);
-        this.score.add(point2);
-        this.score.add(point3);
-        this.score.add(point4);
     }
 
     static void findOutTheWinners(List<Student> students) {
@@ -87,17 +83,41 @@ public class Student {
 
     public static void main(String[] args) {
         Student student1 = new Student
-                ("Дмитрий", "Олегов", "Васильевич", 56, 23, 75, 54);
+                ("Дмитрий", "Олегов", "Васильевич", new ArrayList<Integer>() {{
+                    add(82);
+                    add(58);
+                    add(28);
+                }});
         Student student2 = new Student
-                ("Михаил", "Галкин", "Юрьевич", 45, 20, 99, 38);
+                ("Михаил", "Галкин", "Юрьевич", new ArrayList<Integer>() {{
+                    add(90);
+                    add(95);
+                    add(10);
+                }});
         Student student3 = new Student
-                ("Сергей", "Хмуров", "Ренатович", 10, 54, 78, 58);
+                ("Сергей", "Хмуров", "Ренатович", new ArrayList<Integer>() {{
+                    add(45);
+                    add(40);
+                    add(86);
+                }});
         Student student4 = new Student
-                ("Алексей", "Лаптев", "Валерьевич", 83, 66, 12, 84);
+                ("Алексей", "Лаптев", "Валерьевич", new ArrayList<Integer>() {{
+                    add(60);
+                    add(50);
+                    add(10);
+                }});
         Student student5 = new Student
-                ("Василий", "Зябликов", "Михайлович", 99, 100, 70, 34);
+                ("Василий", "Зябликов", "Михайлович", new ArrayList<Integer>() {{
+                    add(100);
+                    add(99);
+                    add(86);
+                }});
         Student student6 = new Student
-                ("Анна", "Рябина", "Васильевна", 99, 100, 69, 45);
+                ("Анна", "Рябина", "Васильевна", new ArrayList<Integer>() {{
+                    add(42);
+                    add(34);
+                    add(56);
+                }});
         List<Student> students = new ArrayList<>();
         students.add(student1);
         students.add(student2);
