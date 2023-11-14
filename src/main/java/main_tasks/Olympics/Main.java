@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Student student1 = new Student("Дмитрий", "Олегов", "Васильевич", new ArrayList<Integer>() {{
-            add(82);
-            add(58);
-            add(28);
-        }});
+        Student student1 = new Student
+                ("Дмитрий", "Олегов", "Васильевич", new ArrayList<Integer>() {{
+                    add(82);
+                    add(58);
+                    add(28);}});
         Student student2 = new Student
                 ("Михаил", "Галкин", "Юрьевич", new ArrayList<Integer>() {{
                     add(90);
