@@ -82,8 +82,7 @@ public class Student {
     }
 
     public static void main(String[] args) {
-        Student student1 = new Student
-                ("Дмитрий", "Олегов", "Васильевич", new ArrayList<Integer>() {{
+        Student student1 = new Student("Дмитрий", "Олегов", "Васильевич", new ArrayList<Integer>() {{
                     add(82);
                     add(58);
                     add(28);
